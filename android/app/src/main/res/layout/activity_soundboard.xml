@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg">
+
+    <include android:id="@+id/appToolbar" layout="@layout/toolbar_simple" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@color/bg"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/sbStatusText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tap a source to restart it in OBS."
+            android:textColor="@color/text_hint"
+            android:textSize="12sp"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/sbRefreshBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="↻ Load Media Sources from OBS"
+            android:layout_marginBottom="12dp" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <GridLayout
+                android:id="@+id/sbGrid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:alignmentMode="alignMargins"
+                android:useDefaultMargins="true" />
+        </ScrollView>
+    </LinearLayout>
+
+    <include android:id="@+id/bottomNav" layout="@layout/bottom_nav_bar" />
+</LinearLayout>

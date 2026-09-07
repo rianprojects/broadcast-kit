@@ -1,0 +1,25 @@
+{
+  "name": "camera-plugin-companion",
+  "version": "1.0.0",
+  "description": "Windows companion app for Camera Plugin (DroidCam-like OBS source helper)",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.dcplugin.companion",
+    "productName": "Camera Plugin Companion",
+    "files": ["src/**/*", "resources/**/*"],
+    "extraResources": [{ "from": "resources/adb", "to": "adb" }],
+    "win": {
+      "target": ["portable"],
+      "signAndEditExecutable": false,
+      "icon": "build/icon.png"
+    }
+  }
+}

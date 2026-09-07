@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg">
+
+    <include android:id="@+id/appToolbar" layout="@layout/toolbar_simple" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+    <!-- Connect Bar -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        app:cardBackgroundColor="@color/surface"
+        android:layout_marginBottom="12dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/obsHostInput"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:hint="OBS IP (e.g. 192.168.1.5)"
+                    android:inputType="text"
+                    android:textSize="13sp" />
+                <EditText
+                    android:id="@+id/obsPortInput"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="4455"
+                    android:inputType="number"
+                    android:textSize="13sp"
+                    android:layout_marginStart="4dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="6dp">
+                <EditText
+                    android:id="@+id/obsPasswordInput"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:hint="Password (optional)"
+                    android:inputType="textPassword"
+                    android:textSize="13sp" />
+                <Button
+                    android:id="@+id/obsConnectBtn"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Connect"
+                    android:layout_marginStart="4dp" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/obsStatusText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Not Connected"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginTop="6dp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Quick Actions (Stream / Record / Studio Mode) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12dp"
+        android:weightSum="3">
+        <Button
+            android:id="@+id/btnToggleStream"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="Stream"
+            android:textSize="13sp"
+            android:singleLine="true"
+            android:drawableStart="@drawable/ic_action_stream"
+            android:drawablePadding="6dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:backgroundTint="#D32F2F" />
+        <Button
+            android:id="@+id/btnToggleRecord"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="Record"
+            android:textSize="13sp"
+            android:singleLine="true"
+            android:drawableStart="@drawable/ic_action_record"
+            android:drawablePadding="6dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:backgroundTint="#1976D2"
+            android:layout_marginStart="6dp" />
+        <Button
+            android:id="@+id/btnCut"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="Transition"
+            android:textSize="13sp"
+            android:singleLine="true"
+            android:drawableStart="@drawable/ic_action_transition"
+            android:drawablePadding="6dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:backgroundTint="#388E3C"
+            android:layout_marginStart="6dp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SCENES (Tap to switch)"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_hint"
+        android:layout_marginBottom="6dp" />
+
+    <!-- Scene Grid -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <GridLayout
+            android:id="@+id/sceneGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:alignmentMode="alignMargins"
+            android:useDefaultMargins="true" />
+    </ScrollView>
+
+    </LinearLayout>
+</LinearLayout>

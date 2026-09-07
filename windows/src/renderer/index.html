@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Camera Plugin Companion</title>
+<style>
+  body { font-family: sans-serif; background: #1e1e2e; color: #eee; margin: 0; padding: 20px; }
+  h2 { margin-top: 0; font-size: 18px; }
+  input { width: 100%; box-sizing: border-box; padding: 8px; margin: 6px 0; border-radius: 6px; border: 1px solid #444; background: #2a2a3a; color: #eee; }
+  button { width: 100%; padding: 10px; margin: 6px 0; border: none; border-radius: 6px; background: #7c5cff; color: #fff; font-weight: bold; cursor: pointer; }
+  button:disabled { background: #555; cursor: default; }
+  #status { margin-top: 10px; padding: 10px; border-radius: 6px; background: #2a2a3a; font-size: 13px; white-space: pre-wrap; }
+  #openBtn { background: #2ecc71; }
+  footer { margin-top: 20px; text-align: center; }
+  footer p { font-size: 12px; color: #888; margin: 8px 0; }
+  .social { display: flex; justify-content: center; gap: 10px; margin: 10px 0; }
+  .social a { width: 32px; height: 32px; border-radius: 50%; background: #7c5cff; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 15px; }
+</style>
+</head>
+<body>
+  <h2>Camera Plugin Companion</h2>
+
+  <div>
+    <label>Phone IP (WiFi mode)</label>
+    <input id="ip" placeholder="192.168.1.x" />
+    <button id="wifiBtn">Connect via WiFi</button>
+  </div>
+
+  <hr style="border-color:#444">
+
+  <div>
+    <label>USB mode (plug cable, enable USB debugging)</label>
+    <button id="usbBtn">Connect via USB</button>
+  </div>
+
+  <button id="openBtn" style="display:none">Open Stream in Browser</button>
+  <div id="status">Idle.</div>
+
+  <footer>
+    <div class="social">
+      <a href="#" data-url="https://instagram.com/rian.projects" title="Instagram">📷</a>
+      <a href="#" data-url="https://tiktok.com/@rian.projetcs" title="TikTok">🎵</a>
+      <a href="#" data-url="https://rianprojects.my.id" title="Website">🌐</a>
+      <a href="#" data-url="https://github.com/rianprojects" title="GitHub">🐙</a>
+    </div>
+    <p>Created by: Rian Projects — rianprojects.my.id</p>
+  </footer>
+
+<script>
+  const statusEl = document.getElementById('status');
+  const openBtn = document.getElementById('openBtn');
+  let currentUrl = null;
+
+  function setStatus(msg) { statusEl.textContent = msg; }
+
+  document.getElementById('wifiBtn').onclick = async () => {
+    const ip = document.getElementById('ip').value.trim();
+    if (!ip) return setStatus('Isi IP HP dulu.');
+    setStatus('Checking ' + ip + ' ...');
+    const ok = await window.api.checkWifi(ip);
+    if (ok) {
+      currentUrl = `http://${ip}:8899/video`;
+      setStatus('Connected via WiFi.');
+      openBtn.style.display = 'block';
+    } else {
+      setStatus('Tidak bisa connect. Pastikan HP dan PC satu jaringan & server aktif.');
+    }
+  };
+
+  document.getElementById('usbBtn').onclick = async () => {
+    setStatus('Menghubungkan via USB (adb)...');
+    try {
+      await window.api.usbConnect();
+      currentUrl = 'http://127.0.0.1:8899/video';
+      setStatus('Connected via USB.');
+      openBtn.style.display = 'block';
+    } catch (e) {
+      setStatus('Gagal: ' + e.message);
+    }
+  };
+
+  document.querySelectorAll('.social a').forEach((a) => {
+    a.onclick = (e) => { e.preventDefault(); window.api.openUrl(a.dataset.url); };
+  });
+
+  openBtn.onclick = () => {
+    if (!currentUrl) return;
+    window.api.copyUrl(currentUrl);
+    window.api.openUrl(currentUrl);
+  };
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/*.apk
+android/dock*.png
+*.log
+windows/dist/
+windows/node_modules/

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  MJPEG-over-HTTP is plaintext by design (LAN streaming to OBS, no TLS overhead
+  for latency). This app never talks to the internet — only to devices on the
+  same local network — so plaintext here does not expose anything remotely.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

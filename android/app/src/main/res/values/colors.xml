@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg">#F4F5F7</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="toolbar_bg">#FFFFFF</color>
+    <color name="text_primary">#111318</color>
+    <color name="text_secondary">#5B6270</color>
+    <color name="text_hint">#8A9099</color>
+    <color name="divider">#E3E5E9</color>
+    <color name="accent">#3D7BFF</color>
+    <color name="control_bg">#EEF0F4</color>
+    <color name="whatsapp">#25D366</color>
+    <color name="dock_indicator">#1F3D7BFF</color>
+</resources>

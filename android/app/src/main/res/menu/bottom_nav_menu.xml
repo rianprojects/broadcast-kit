@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_camera" android:title="Camera" android:icon="@drawable/ic_dock_camera" />
+    <item android:id="@+id/nav_deck" android:title="OBS Deck" android:icon="@drawable/ic_dock_deck" />
+    <item android:id="@+id/nav_tally" android:title="Tally" android:icon="@drawable/ic_dock_tally" />
+    <item android:id="@+id/nav_more" android:title="More" android:icon="@drawable/ic_dock_more" />
+</menu>

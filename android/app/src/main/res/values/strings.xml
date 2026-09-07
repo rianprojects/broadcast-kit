@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BroadcastKit</string>
+    <string name="app_description">Rian Projects — all-in-one streaming toolkit: wireless cam, OBS deck, tally (v0.1)</string>
+    <string name="toggle_theme">Toggle dark / light mode</string>
+    <string name="order_via_whatsapp">Order via WhatsApp</string>
+    <string name="action_back">Back</string>
+
+    <!-- Diisi oleh yang melakukan rebuild/fork, mis. "Nama Kamu — kamu.my.id". Kosong = baris ini disembunyikan. -->
+    <string name="rebuilder_name"></string>
+</resources>
