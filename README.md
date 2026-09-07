@@ -5,11 +5,11 @@ camera driver required — OBS reads the stream via a Browser/Media Source.
 
 ## How it works
 1. Install the Android app, grant camera permission, tap **Start Camera Server**.
-   It streams MJPEG at `http://<phone-ip>:8080/video`.
+   It streams MJPEG at `http://<phone-ip>:8899/video`.
 2. Run the Windows companion app:
    - **WiFi**: type the phone's IP (shown in the Android app), click Check connection.
    - **USB**: enable USB debugging on the phone, plug it in, click Connect via USB
-     (uses bundled `adb forward` so the stream is reachable at `http://localhost:8080/video`).
+     (uses bundled `adb forward` so the stream is reachable at `http://localhost:8899/video`).
 3. Copy the shown URL. In OBS: **Sources → + → Browser Source** → paste URL → set
    Width/Height to match the camera resolution (default 1280x720).
 
