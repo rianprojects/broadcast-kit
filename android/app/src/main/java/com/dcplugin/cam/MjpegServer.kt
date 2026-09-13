@@ -109,7 +109,7 @@ class MjpegServer(
         val resp = newFixedLengthResponse(
             Response.Status.OK,
             "application/json",
-            """{"status":"$result","clients":${streams.size},"fps":$currentFps}"""
+            """{"status":"$result","clients":${streams.size},"fps":$currentFps,"kbps":$currentKbps,"width":$lastWidth,"height":$lastHeight}"""
         )
         resp.addHeader("Access-Control-Allow-Origin", "*")
         return resp
@@ -135,17 +135,36 @@ class MjpegServer(
         val dims = if (lastWidth > 0) "${lastWidth}x${lastHeight}" else "waiting for first frame..."
         val clients = streams.size
         val pinSuffix = if (!pin.isNullOrEmpty()) "?pin=$pin" else ""
+        val apiSuffix = if (!pin.isNullOrEmpty()) "?pin=$pin" else ""
         return """
         <html><body style="background:#111;color:#eee;font-family:sans-serif;text-align:center;padding:20px">
-        <h2>BroadcastKit v0.1</h2>
-        <div style="padding:10px;background:#222;display:inline-block;border-radius:8px;margin-bottom:15px">
-            <b>Status:</b> ${if (clients > 0) "<span style='color:#4CAF50'>Connected ($clients Clients)</span>" else "<span style='color:#bbb'>Idle / No Client</span>"}<br>
-            <b>Live Stats:</b> $currentFps FPS | $currentKbps KB/s<br>
-            <b>Resolution:</b> $dims
+        <h2>BroadcastKit v${BuildConfig.VERSION_NAME}</h2>
+        <div id="statusBox" style="padding:10px;background:#222;display:inline-block;border-radius:8px;margin-bottom:15px">
+            <b>Status:</b> <span id="statusText">${if (clients > 0) "<span style='color:#4CAF50'>Connected ($clients Clients)</span>" else "<span style='color:#bbb'>Idle / No Client</span>"}</span><br>
+            <b>Live Stats:</b> <span id="statsText">$currentFps FPS | $currentKbps KB/s</span><br>
+            <b>Resolution:</b> <span id="resText">$dims</span>
         </div>
         <p>OBS Browser/Media Source URL:</p>
         <code>http://&lt;this-device-ip&gt;:${listeningPort}/video$pinSuffix</code>
-        <p style="margin-top:15px"><img src="/video$pinSuffix" style="max-width:90%;border:2px solid #444;border-radius:6px" /></p>
+        <p style="margin-top:15px"><img id="videoImg" src="/video$pinSuffix" style="max-width:90%;border:2px solid #444;border-radius:6px" /></p>
+        <script>
+        function poll() {
+            fetch('/api/status$apiSuffix').then(r => r.json()).then(d => {
+                document.getElementById('statusText').innerHTML = d.clients > 0
+                    ? "<span style='color:#4CAF50'>Connected (" + d.clients + " Clients)</span>"
+                    : "<span style='color:#bbb'>Idle / No Client</span>";
+                document.getElementById('statsText').textContent = d.fps + ' FPS | ' + d.kbps + ' KB/s';
+                document.getElementById('resText').textContent = d.width > 0 ? (d.width + 'x' + d.height) : 'waiting for first frame...';
+            }).catch(() => {});
+        }
+        setInterval(poll, 1000);
+        var img = document.getElementById('videoImg');
+        img.onerror = function() {
+            setTimeout(function() {
+                img.src = '/video${pinSuffix}${if (pinSuffix.isEmpty()) "?" else "&"}_r=' + Date.now();
+            }, 1000);
+        };
+        </script>
         </body></html>
         """.trimIndent()
     }
