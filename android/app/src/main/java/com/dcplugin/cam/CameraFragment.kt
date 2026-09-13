@@ -294,24 +294,44 @@ class CameraFragment : Fragment(), SensorEventListener {
         }
     }
 
-    private fun setupSpinners() {
-        val labels = RESOLUTION_PRESETS.map { "${it.width}x${it.height}" }
+    /** Recomputed whenever the active camera/source changes — only shows what it actually supports. */
+    private var resolutionOptions = RESOLUTION_PRESETS
+    private var fpsOptions = FPS_PRESETS
+
+    private fun refreshResolutionFpsSpinners() {
+        resolutionOptions = boundService?.supportedResolutions() ?: RESOLUTION_PRESETS
+        val labels = resolutionOptions.map {
+            val tag = when {
+                it.height >= 2160 -> " (4K)"
+                it.height >= 1440 -> " (2K)"
+                else -> ""
+            }
+            "${it.width}x${it.height}$tag"
+        }
         binding.resolutionSpinner.adapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, labels)
-        val currentIndex = RESOLUTION_PRESETS.indexOf(boundService?.resolution).coerceAtLeast(0)
+        val currentIndex = resolutionOptions.indexOf(boundService?.resolution).coerceAtLeast(0)
         binding.resolutionSpinner.setSelection(currentIndex)
+
+        fpsOptions = boundService?.supportedFpsOptions() ?: FPS_PRESETS
+        val fpsLabels = fpsOptions.map { "$it FPS" }
+        binding.fpsSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, fpsLabels)
+        val currentFpsIndex = fpsOptions.indexOf(boundService?.targetFps).coerceAtLeast(0)
+        binding.fpsSpinner.setSelection(currentFpsIndex)
+    }
+
+    private fun setupSpinners() {
+        refreshResolutionFpsSpinners()
         binding.resolutionSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                boundService?.let { if (it.resolution != RESOLUTION_PRESETS[pos]) it.setResolution(RESOLUTION_PRESETS[pos]) }
+                boundService?.let { if (it.resolution != resolutionOptions[pos]) it.setResolution(resolutionOptions[pos]) }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        val fpsLabels = FPS_PRESETS.map { "$it FPS" }
-        binding.fpsSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, fpsLabels)
         binding.fpsSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                boundService?.let { if (it.targetFps != FPS_PRESETS[pos]) it.setFps(FPS_PRESETS[pos]) }
+                boundService?.let { if (it.targetFps != fpsOptions[pos]) it.setFps(fpsOptions[pos]) }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
@@ -399,6 +419,7 @@ class CameraFragment : Fragment(), SensorEventListener {
     }
 
     private fun setupControls() {
+        refreshResolutionFpsSpinners()
         setupExposureBar()
         setupZoomBar()
         binding.flashButton.text = if (boundService?.isTorchOn == true) "Flash: ON" else "Flash: OFF"
