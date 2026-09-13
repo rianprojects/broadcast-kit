@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.*
 import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
 import android.hardware.camera2.CaptureRequest
 import android.os.Binder
 import android.os.Build
@@ -24,13 +25,15 @@ private const val CHANNEL_ID = "camera_server"
 private const val NOTIF_ID = 1
 
 val RESOLUTION_PRESETS = listOf(
+    Size(3840, 2160), // 4K
+    Size(2560, 1440), // 2K
     Size(1920, 1080),
     Size(1280, 720),
     Size(854, 480),
     Size(640, 360)
 )
 
-val FPS_PRESETS = listOf(30, 60, 24, 15)
+val FPS_PRESETS = listOf(120, 90, 60, 30, 24, 15)
 
 enum class CameraSource { DEVICE, USB }
 
@@ -212,6 +215,43 @@ class CameraServerService : LifecycleService() {
 
     fun currentExposureIndex(): Int =
         camera?.cameraInfo?.exposureState?.exposureCompensationIndex ?: 0
+
+    /** Resolutions from RESOLUTION_PRESETS the active camera actually reports supporting. */
+    fun supportedResolutions(): List<Size> {
+        if (cameraSource == CameraSource.USB) return RESOLUTION_PRESETS
+        val sizes = camera2StreamSizes() ?: return RESOLUTION_PRESETS
+        return RESOLUTION_PRESETS.filter { preset -> sizes.any { it == preset } }.ifEmpty { RESOLUTION_PRESETS }
+    }
+
+    /** FPS values from FPS_PRESETS the active camera's AE ranges actually cover. */
+    fun supportedFpsOptions(): List<Int> {
+        if (cameraSource == CameraSource.USB) return FPS_PRESETS
+        val ranges = camera2FpsRanges() ?: return FPS_PRESETS
+        return FPS_PRESETS.filter { fps -> ranges.any { it.lower <= fps && fps <= it.upper } }.ifEmpty { FPS_PRESETS }
+    }
+
+    private fun camera2CharacteristicsForFacing(): CameraCharacteristics? {
+        return try {
+            val cm = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+            val wantFacing = if (lensFacing == CameraSelector.LENS_FACING_FRONT)
+                CameraCharacteristics.LENS_FACING_FRONT else CameraCharacteristics.LENS_FACING_BACK
+            val id = cm.cameraIdList.firstOrNull { cm.getCameraCharacteristics(it).get(CameraCharacteristics.LENS_FACING) == wantFacing }
+            id?.let { cm.getCameraCharacteristics(it) }
+        } catch (_: Exception) { null }
+    }
+
+    private fun camera2StreamSizes(): List<Size>? = try {
+        camera2CharacteristicsForFacing()
+            ?.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+            ?.getOutputSizes(ImageFormat.YUV_420_888)
+            ?.toList()
+    } catch (_: Exception) { null }
+
+    private fun camera2FpsRanges(): List<Range<Int>>? = try {
+        camera2CharacteristicsForFacing()
+            ?.get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES)
+            ?.toList()
+    } catch (_: Exception) { null }
 
     fun serverUrl(ip: String): String {
         val pinSuffix = if (!serverPin.isNullOrEmpty()) "?pin=$serverPin" else ""
