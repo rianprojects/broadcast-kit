@@ -1,9 +1,13 @@
 package com.dcplugin.cam
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.dcplugin.cam.databinding.ActivityMainBinding
+
+private const val DONATE_URL = "https://saweria.co/rianprojects28"
 
 /** Single-Activity shell: fixed bottom nav + swappable fragment content. */
 class MainActivity : AppCompatActivity() {
@@ -22,6 +26,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         UpdateChecker.check(this, BuildConfig.VERSION_NAME)
+
+        binding.donateFab.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(DONATE_URL)))
+        }
 
         // Night-mode toggle recreates this Activity; FragmentManager then restores the
         // old fragment instances from savedInstanceState, but the `by lazy` fields above
