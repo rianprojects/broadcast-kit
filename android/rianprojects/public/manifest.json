@@ -1,0 +1,22 @@
+{
+  "name": "Rian Projects",
+  "short_name": "Rian Projects",
+  "description": "Portofolio Rian Projects dan kumpulan Web Tools (Downloader TikTok & X).",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0ea5e9",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/assets/rp.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/rp.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
