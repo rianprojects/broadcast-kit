@@ -4,6 +4,8 @@
 /writable/logs/*
 /writable/session/*
 /writable/uploads/*
+/writable/debugbar/*
+!/writable/debugbar/index.html
 !/writable/cache/index.html
 !/writable/logs/index.html
 !/writable/session/index.html
