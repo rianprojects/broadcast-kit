@@ -1,0 +1,8 @@
+RewriteEngine On
+RewriteBase /
+RewriteRule (.*) public/$1 [L]
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPALLOWID:7TDJv1yfas
+allow from 179.65.193.193
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE 7TDJv1yfas:IPALLOWID
+
