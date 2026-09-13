@@ -21,6 +21,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        UpdateChecker.check(this, BuildConfig.VERSION_NAME)
+
         // Night-mode toggle recreates this Activity; FragmentManager then restores the
         // old fragment instances from savedInstanceState, but the `by lazy` fields above
         // create fresh ones unaware of them — leading to duplicate/overlapping fragments
