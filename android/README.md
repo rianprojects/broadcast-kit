@@ -1,37 +1,37 @@
 # BroadcastKit — Android Camera & Control App
 
-Aplikasi Android pendamping untuk OBS: streaming kamera HP sebagai sumber video (MJPEG) ke OBS/PC di jaringan yang sama, plus kontrol tambahan seperti tally light, timer, dan soundboard.
+Companion Android app for OBS: streams the phone camera as a video source (MJPEG) to OBS/PC on the same network, plus extra controls such as tally light, timer, and soundboard.
 
-## Fitur
+## Features
 
-- **Camera streaming** — stream kamera HP via MJPEG server ke OBS/browser di jaringan lokal.
-- **Tally light** — indikator status live/preview dari OBS.
-- **Timer** — activity timer untuk kebutuhan produksi.
-- **Soundboard** — pemutar sound effect cepat.
-- **Stats** — informasi statistik koneksi/stream.
-- **OBS WebSocket integration** — komunikasi dua arah dengan OBS Studio.
-- Foreground service agar streaming tetap jalan saat aplikasi di-background.
-- **Dock menu & UI konsisten (v0.1)** — bottom navigation modern (vector icon, dark theme, tanpa emoji), toolbar seragam di semua layar (OBS Deck, More, Stats, Timer, Soundboard).
+- **Camera streaming** — stream the phone camera via an MJPEG server to OBS/browser on the local network.
+- **Tally light** — live/preview status indicator from OBS.
+- **Timer** — activity timer for production needs.
+- **Soundboard** — quick sound effect player.
+- **Stats** — connection/stream statistics.
+- **OBS WebSocket integration** — two-way communication with OBS Studio.
+- Foreground service keeps streaming running while the app is in the background.
+- **Dock menu & consistent UI (v0.1)** — modern bottom navigation (vector icons, dark theme, no emoji), uniform toolbar across all screens (OBS Deck, More, Stats, Timer, Soundboard).
 
-> Rilis APK siap pakai: lihat [Releases](https://github.com/rianprojects/BroadcastKit/releases).
+> Ready-to-use APK release: see [Releases](https://github.com/rianprojects/BroadcastKit/releases).
 
-## Spesifikasi Perangkat
+## Device Specifications
 
 | | |
 |---|---|
-| Versi Android minimum | Android 7.0 Nougat (API 24) |
+| Minimum Android version | Android 7.0 Nougat (API 24) |
 | Target Android | Android 14 (API 34) |
-| Kamera | Wajib, untuk fitur streaming |
-| Jaringan | Wi-Fi (HP & PC/OBS harus satu jaringan) |
-| RAM disarankan | 3 GB+ |
+| Camera | Required, for streaming |
+| Network | Wi-Fi (phone & PC/OBS must be on the same network) |
+| Recommended RAM | 3 GB+ |
 
-## Struktur Proyek
+## Project Structure
 
 ```
 android/
 ├── app/
 │   └── src/main/
-│       ├── java/com/dcplugin/cam/   # Source code Kotlin
+│       ├── java/com/dcplugin/cam/   # Kotlin source code
 │       ├── res/                     # Layout, drawable, values
 │       └── AndroidManifest.xml
 ├── build.gradle.kts
@@ -41,99 +41,99 @@ android/
 
 ## Requirements
 
-- Android Studio (Koala atau lebih baru direkomendasikan)
+- Android Studio (Koala or newer recommended)
 - Android SDK
-- Perangkat Android dengan kamera (min. sesuai `minSdk` di `app/build.gradle.kts`)
-- OBS Studio dengan plugin/WebSocket aktif (opsional, untuk integrasi kontrol)
+- Android device with a camera (minimum per `minSdk` in `app/build.gradle.kts`)
+- OBS Studio with plugin/WebSocket enabled (optional, for control integration)
 
-## Tutorial Build
+## Build Tutorial
 
-### A. Build via Android Studio (paling gampang)
+### A. Build via Android Studio (easiest)
 
-1. Install [Android Studio](https://developer.android.com/studio) (sudah termasuk Android SDK).
-2. Clone repo:
+1. Install [Android Studio](https://developer.android.com/studio) (includes the Android SDK).
+2. Clone the repo:
    ```bash
    git clone https://github.com/rianprojects/BroadcastKit.git
    ```
-3. Buka Android Studio → **Open** → pilih folder `BroadcastKit` (folder yang berisi `settings.gradle.kts`).
-4. Tunggu proses **Gradle Sync** selesai (pojok kanan bawah). Kalau diminta update Gradle/SDK, ikuti saja.
-5. Sambungkan HP Android via USB (aktifkan **USB Debugging** di Developer Options) atau siapkan emulator.
-6. Klik tombol **Run ▶** (atau `Shift+F10`) — pilih device tujuan.
-7. Aplikasi otomatis ter-install & terbuka di device.
+3. Open Android Studio → **Open** → select the `BroadcastKit` folder (the one containing `settings.gradle.kts`).
+4. Wait for **Gradle Sync** to finish (bottom-right corner). If prompted to update Gradle/SDK, follow along.
+5. Connect an Android phone via USB (enable **USB Debugging** in Developer Options) or set up an emulator.
+6. Click the **Run ▶** button (or `Shift+F10`) — choose the target device.
+7. The app is installed and launched automatically on the device.
 
 ### B. Build via Command Line (CLI)
 
-1. Pastikan `JAVA_HOME` mengarah ke JDK 17+ dan Android SDK sudah terinstall (`ANDROID_HOME` di-set).
-2. Clone repo lalu masuk ke foldernya:
+1. Make sure `JAVA_HOME` points to JDK 17+ and the Android SDK is installed (`ANDROID_HOME` set).
+2. Clone the repo and enter its folder:
    ```bash
    git clone https://github.com/rianprojects/BroadcastKit.git
    cd BroadcastKit
    ```
-3. Build APK debug:
+3. Build the debug APK:
    ```bash
    ./gradlew assembleDebug
    ```
    (Windows PowerShell: `.\gradlew.bat assembleDebug`)
-4. Hasil APK ada di:
+4. The APK is located at:
    ```
    app/build/outputs/apk/debug/app-debug.apk
    ```
-5. Install ke device yang sudah tersambung via ADB:
+5. Install on a device connected via ADB:
    ```bash
    adb install app/build/outputs/apk/debug/app-debug.apk
    ```
 
-### C. Build APK Release (sudah di-sign, untuk dibagikan)
+### C. Build a signed Release APK (for sharing)
 
-1. Generate keystore (sekali saja):
+1. Generate a keystore (once):
    ```bash
    keytool -genkey -v -keystore release.keystore -alias dcplugin -keyalg RSA -keysize 2048 -validity 10000
    ```
-2. Tambahkan konfigurasi signing di `app/build.gradle.kts` (`signingConfigs` + `buildTypes.release`), atau sign manual pakai `apksigner` setelah build:
+2. Add the signing config to `app/build.gradle.kts` (`signingConfigs` + `buildTypes.release`), or sign manually with `apksigner` after building:
    ```bash
    ./gradlew assembleRelease
    apksigner sign --ks release.keystore app/build/outputs/apk/release/app-release-unsigned.apk
    ```
 
-### Setelah Install
+### After Installation
 
-1. Buka aplikasi, izinkan permission **Camera** dan **Notification** (untuk foreground service).
-2. Pastikan HP dan PC (OBS) terhubung di **Wi-Fi/jaringan yang sama**.
-3. Jalankan streaming dari app — catat alamat IP:port yang muncul (default port **8899**, bisa diganti manual di app kalau bentrok dengan service lain di HP).
-4. Di OBS, tambahkan **Source → Browser** atau **Media Source** dengan URL MJPEG tersebut (`http://<ip-hp>:8899/video`), atau hubungkan lewat OBS WebSocket sesuai konfigurasi di app.
+1. Open the app and grant **Camera** and **Notification** permissions (for the foreground service).
+2. Make sure the phone and PC (OBS) are connected to the **same Wi-Fi/network**.
+3. Start streaming from the app — note the IP:port shown (default port **8899**, can be changed manually in the app if it conflicts with another service on the phone).
+4. In OBS, add **Source → Browser** or **Media Source** with the MJPEG URL (`http://<phone-ip>:8899/video`), or connect via OBS WebSocket according to the app configuration.
 
-> **Tips mengurangi delay:** gunakan Wi-Fi **5GHz atau Wi-Fi 6** (bukan 2.4GHz) untuk HP dan PC/OBS, dan pastikan keduanya konek ke access point yang sama (bukan lewat router berbeda/mesh yang jauh). Band 2.4GHz lebih rentan interferensi dan bandwidth-nya lebih kecil, sehingga delay/lag MJPEG streaming jadi lebih terasa.
+> **Tips to reduce delay:** use **5GHz or Wi-Fi 6** (not 2.4GHz) Wi-Fi for both the phone and PC/OBS, and make sure both connect to the same access point (not through a different/far-away mesh router). The 2.4GHz band is more prone to interference and has lower bandwidth, making MJPEG streaming delay/lag more noticeable.
 
-## Izin yang Digunakan
+## Permissions Used
 
-| Permission | Kegunaan |
+| Permission | Purpose |
 |---|---|
-| `CAMERA` | Mengambil feed kamera untuk streaming |
-| `INTERNET` | Server MJPEG & komunikasi WebSocket |
-| `ACCESS_WIFI_STATE` / `ACCESS_NETWORK_STATE` | Deteksi alamat IP jaringan lokal |
-| `FOREGROUND_SERVICE` / `FOREGROUND_SERVICE_CAMERA` | Menjaga streaming tetap aktif di background |
+| `CAMERA` | Capture the camera feed for streaming |
+| `INTERNET` | MJPEG server & WebSocket communication |
+| `ACCESS_WIFI_STATE` / `ACCESS_NETWORK_STATE` | Detect the local network IP address |
+| `FOREGROUND_SERVICE` / `FOREGROUND_SERVICE_CAMERA` | Keep streaming active in the background |
 
-## Kontribusi & Penggunaan Bebas
+## Contribution & Free Use
 
-Proyek ini **open source dan bebas digunakan**. Silakan:
+This project is **open source and free to use**. Feel free to:
 
-- Fork, redesign, atau build ulang sesuai kebutuhan/selera kamu.
-- Modifikasi fitur, UI, atau arsitektur tanpa perlu izin.
-- Gunakan untuk proyek pribadi maupun komersial.
+- Fork, redesign, or rebuild to suit your needs/taste.
+- Modify features, UI, or architecture without permission.
+- Use it for personal or commercial projects.
 
-Tidak ada batasan berekspresi — cukup pertahankan notice lisensi di bawah saat mendistribusikan ulang.
+There are no limits on expression — just keep the license notice below when redistributing.
 
-### Kalau kamu rebuild/fork
+### If you rebuild/fork
 
-Footer nama pembuat asli (**Rian Projects**) tetap tertanam di aplikasi dan tidak perlu dihapus. Untuk menambahkan namamu sebagai rebuilder, isi resource berikut sebelum build:
+The original creator's footer name (**Rian Projects**) stays embedded in the app and does not need to be removed. To add your name as the rebuilder, fill in the following resource before building:
 
 ```xml
 <!-- app/src/main/res/values/strings.xml -->
-<string name="rebuilder_name">Nama Kamu — link.mu</string>
+<string name="rebuilder_name">Your Name — your.link</string>
 ```
 
-Baris "Rebuilt by: ..." otomatis muncul di footer aplikasi di bawah nama pembuat asli. Kalau dikosongkan, baris ini tersembunyi.
+The "Rebuilt by: ..." line automatically appears in the app footer below the original creator's name. If left empty, this line is hidden.
 
-## Lisensi
+## License
 
-Proyek ini dilisensikan di bawah [MIT License](LICENSE) — bebas dipakai, dimodifikasi, dan didistribusikan ulang, dengan atau tanpa perubahan, untuk keperluan apa pun.
+This project is licensed under the [MIT License](LICENSE) — free to use, modify, and redistribute, with or without changes, for any purpose.

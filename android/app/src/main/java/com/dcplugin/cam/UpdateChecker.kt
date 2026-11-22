@@ -11,7 +11,7 @@ import java.net.URL
 /** Checks GitHub Releases for a newer version and shows a force-update dialog if found. */
 object UpdateChecker {
 
-    private const val API_URL = "https://domain-kamu.com/api/version"
+    private const val API_URL = "https://your-domain.com/api/version"
 
     fun check(activity: Activity, currentVersion: String) {
         Thread {
@@ -36,17 +36,17 @@ object UpdateChecker {
 
     private fun showDialog(activity: Activity, latestVersion: String, url: String, force: Boolean) {
         val builder = AlertDialog.Builder(activity)
-            .setTitle("Update tersedia")
-            .setMessage("Versi terbaru ($latestVersion) sudah tersedia.")
+            .setTitle("Update available")
+            .setMessage("A newer version ($latestVersion) is available.")
             .setCancelable(false)
             .setPositiveButton("Update") { _, _ ->
                 activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                 if (force) activity.finishAffinity()
             }
         if (force) {
-            builder.setNegativeButton("Keluar") { _, _ -> activity.finishAffinity() }
+            builder.setNegativeButton("Exit") { _, _ -> activity.finishAffinity() }
         } else {
-            builder.setNegativeButton("Nanti", null)
+            builder.setNegativeButton("Later", null)
         }
         builder.show()
     }

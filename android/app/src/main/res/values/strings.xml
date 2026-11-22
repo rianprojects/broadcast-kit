@@ -6,6 +6,6 @@
     <string name="order_via_whatsapp">Order via WhatsApp</string>
     <string name="action_back">Back</string>
 
-    <!-- Diisi oleh yang melakukan rebuild/fork, mis. "Nama Kamu — kamu.my.id". Kosong = baris ini disembunyikan. -->
+    <!-- Filled by whoever rebuilds/forks, e.g. "Your Name — your.link". Empty = this line is hidden. -->
     <string name="rebuilder_name"></string>
 </resources>

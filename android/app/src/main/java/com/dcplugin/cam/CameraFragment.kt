@@ -601,15 +601,15 @@ class CameraFragment : Fragment(), SensorEventListener {
                 return
             } catch (_: Exception) {}
         }
-        Toast.makeText(requireContext(), "Buka manual: Settings > Hotspot & Tethering", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), "Open manually: Settings > Hotspot & Tethering", Toast.LENGTH_LONG).show()
     }
 
     private fun showUsbCableModeDialog() {
         val port = boundService?.serverPort ?: 8899
-        val message = "Colok HP ke laptop pakai kabel USB, lalu aktifkan USB Tethering " +
+        val message = "Plug the phone into the laptop with a USB cable, then enable USB Tethering " +
             "(Settings > Network & Internet > Hotspot & Tethering > USB Tethering).\n\n" +
-            "Tanpa WiFi/data. Setelah aktif, buka http://${getLocalIpAddress()}:$port/video " +
-            "di browser laptop — IP ini otomatis muncul di URL card."
+            "No WiFi/data needed. Once active, open http://${getLocalIpAddress()}:$port/video " +
+            "in the laptop browser — this IP appears automatically in the URL card."
         AlertDialog.Builder(requireContext())
             .setTitle("Start Camera USB (via Cable)")
             .setMessage(message)

@@ -55,7 +55,7 @@
 
   document.getElementById('wifiBtn').onclick = async () => {
     const ip = document.getElementById('ip').value.trim();
-    if (!ip) return setStatus('Isi IP HP dulu.');
+    if (!ip) return setStatus('Enter the phone IP first.');
     setStatus('Checking ' + ip + ' ...');
     const ok = await window.api.checkWifi(ip);
     if (ok) {
@@ -63,19 +63,19 @@
       setStatus('Connected via WiFi.');
       openBtn.style.display = 'block';
     } else {
-      setStatus('Tidak bisa connect. Pastikan HP dan PC satu jaringan & server aktif.');
+      setStatus('Could not connect. Ensure phone and PC are on the same network & server is running.');
     }
   };
 
   document.getElementById('usbBtn').onclick = async () => {
-    setStatus('Menghubungkan via USB (adb)...');
+    setStatus('Connecting via USB (adb)...');
     try {
       await window.api.usbConnect();
       currentUrl = 'http://127.0.0.1:8899/video';
       setStatus('Connected via USB.');
       openBtn.style.display = 'block';
     } catch (e) {
-      setStatus('Gagal: ' + e.message);
+      setStatus('Failed: ' + e.message);
     }
   };
 
